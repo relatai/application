@@ -22,7 +22,7 @@ import br.relatai.tcc.services.CategoriasServices;
 
 @RestController
 @RequestMapping("/categorias")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:8013")
 public class CategoriasResources {
 
 	@Autowired
