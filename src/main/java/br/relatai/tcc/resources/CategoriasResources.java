@@ -1,5 +1,6 @@
 package br.relatai.tcc.resources;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.relatai.tcc.dominio.Categoria;
 import br.relatai.tcc.dominio.Relato;
 import br.relatai.tcc.services.CategoriasServices;
+import br.relatai.tcc.services.ConvertBase64AndUploadToCloudinaryImageService;
 
 @RestController
 @RequestMapping("/categorias")
@@ -22,6 +24,9 @@ public class CategoriasResources {
 
 	@Autowired
 	private CategoriasServices categoriasServices;	
+	
+	@Autowired 
+	private ConvertBase64AndUploadToCloudinaryImageService uploadToCloudinary;
 			
 	@PostMapping
 	public ResponseEntity<Void> salvar(@Valid @RequestBody Categoria categoria) {		
@@ -44,7 +49,13 @@ public class CategoriasResources {
 	}	
 	
 	@PostMapping(path = "/{cid}/relatos")
-	public ResponseEntity<Void> relatar(@PathVariable String cid, @Valid @RequestBody Relato relato) {				
+	public ResponseEntity<Void> relatar(@PathVariable String cid, @Valid @RequestBody Relato relato) throws IOException {				
+		
+		relato.setFoto(uploadToCloudinary.mePassaAStringBase64(relato.getFoto())
+				  .ireiConverter()
+				  .realizarOUpload()
+				  .entaoEstouRetornandoAUrlDaImagemAposUpload());
+	
 		Categoria categoria = categoriasServices.relatar(cid, relato);		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId()).toUri();
 		return ResponseEntity.created(uri).build();
