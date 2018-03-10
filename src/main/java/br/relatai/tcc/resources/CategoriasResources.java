@@ -57,7 +57,11 @@ public class CategoriasResources {
 				  .entaoEstouRetornandoAUrlDaImagemAposUpload());
 	
 		Categoria categoria = categoriasServices.relatar(cid, relato);		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(categoria.getId())
+				.toUri();
+		
 		return ResponseEntity.created(uri).build();
 	}
 }
