@@ -32,7 +32,7 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 	private String uuidFileName;
 	private File convertedToFile;
 
-	public ConvertBase64AndUploadToCloudinaryImageService mePassaAStringBase64(String stringImageBase64) {
+	public ConvertBase64AndUploadToCloudinaryImageService mePassaStringBase64(String stringImageBase64) {
 		this.uuidFileName = UUID.randomUUID().toString().replaceAll("-", "");
 		this.stringImageBase64 = stringImageBase64;
 		return this;
@@ -43,12 +43,12 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 		return this;
 	}
 
-	public ConvertBase64AndUploadToCloudinaryImageService realizarOUpload() throws IOException {
+	public ConvertBase64AndUploadToCloudinaryImageService realizarUpload() throws IOException {
 		fazerUpload();
 		return this;
 	}
 
-	public String entaoEstouRetornandoAUrlDaImagemAposUpload() {
+	public String eRetornarUrlGeradaAposUpload() {
 		return this.cloudinaryImagemUrl;
 	}
 

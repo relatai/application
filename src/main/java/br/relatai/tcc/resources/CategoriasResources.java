@@ -51,10 +51,10 @@ public class CategoriasResources {
 	@PostMapping(path = "/{cid}/relatos")
 	public ResponseEntity<Void> relatar(@PathVariable String cid, @Valid @RequestBody Relato relato) throws IOException {				
 		
-		relato.setFoto(uploadToCloudinary.mePassaAStringBase64(relato.getFoto())
+		relato.setFoto(uploadToCloudinary.mePassaStringBase64(relato.getFoto())
 				  .ireiConverter()
-				  .realizarOUpload()
-				  .entaoEstouRetornandoAUrlDaImagemAposUpload());
+				  .realizarUpload()
+				  .eRetornarUrlGeradaAposUpload());
 	
 		Categoria categoria = categoriasServices.relatar(cid, relato);		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
