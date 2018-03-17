@@ -32,7 +32,7 @@ public class RelatosResources {
 	}
 	
 	@GetMapping(path="/{uid}/usuarios")
-	public ResponseEntity<?> relatosPorUsuario(@PathVariable String uid){
+	public ResponseEntity<?> meusRelatos(@PathVariable String uid){
 		//CacheControl cacheControl = CacheControl.maxAge(5, TimeUnit.SECONDS);
 		List<Relato> relatos = relatosServices.relatosPorUsuario(uid);	
 		return ResponseEntity.status(HttpStatus.OK).body(relatos);
