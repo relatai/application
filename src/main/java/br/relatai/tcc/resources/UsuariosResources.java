@@ -2,17 +2,14 @@ package br.relatai.tcc.resources;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import br.relatai.tcc.dominio.Usuario;
 import br.relatai.tcc.services.UsuariosServices;
 
 @RestController
 @RequestMapping("/usuarios")
-//@CrossOrigin
 public class UsuariosResources {
 
 	@Autowired

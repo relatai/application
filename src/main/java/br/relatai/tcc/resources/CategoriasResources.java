@@ -4,14 +4,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import br.relatai.tcc.dominio.Categoria;
 import br.relatai.tcc.dominio.Relato;
 import br.relatai.tcc.services.CategoriasServices;
@@ -19,11 +16,10 @@ import br.relatai.tcc.services.ConvertBase64AndUploadToCloudinaryImageService;
 
 @RestController
 @RequestMapping("/categorias")
-//@CrossOrigin(origins = "http://localhost:8013")
 public class CategoriasResources {
 
 	@Autowired
-	private CategoriasServices categoriasServices;	
+	private CategoriasServices categoriasServices;		
 	
 	@Autowired 
 	private ConvertBase64AndUploadToCloudinaryImageService uploadToCloudinary;
@@ -63,5 +59,5 @@ public class CategoriasResources {
 				.toUri();
 		
 		return ResponseEntity.created(uri).build();
-	}
+	}	
 }

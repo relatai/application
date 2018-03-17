@@ -70,6 +70,18 @@ public class CategoriasServices {
 		}		
 		atualizar(categoria);		
 		return categoria;
-	}	
+	}
+	
+	public void removerRelato(String relatoId) {
+		Categoria categoria = categoriasRepository.findByRelatosIn(relatoId);
+		for(Relato r : categoria.getRelatos()) {			
+			if(r.getId().equals(relatoId)) {
+				categoria.getRelatos().remove(r);
+				categoriasRepository.save(categoria);
+				relatosServices.remover(relatoId);
+				break;
+			}			
+		}		
+	}
 }
 

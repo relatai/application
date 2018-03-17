@@ -16,6 +16,9 @@ public class RelatosServices {
 	
 	@Autowired
 	private ValidacoesServices validacoesServices;
+	
+	@Autowired
+	private CategoriasServices categoriasServices;
 		
 	public Relato buscarPorId(String id) {
 		Relato relato = relatosRepository.findOne(id);		
@@ -46,14 +49,26 @@ public class RelatosServices {
 	public void validar(String rid, Validacao validacao) {
 		Relato relato = relatosRepository.findOne(rid);	
 		validacoesServices.salvar(validacao);
-		if(validacao.isReacao() == true) {			
+		if(validacao.isReacao()) {			
 			relato.setConfirmado(relato.getConfirmado() + 1);
 		}else {
 			relato.setDenunciado(relato.getDenunciado() + 1);
 			if((relato.getConfirmado() < 30) && (relato.getDenunciado() == 5)) {
-				relatosRepository.delete(relato);
+				categoriasServices.removerRelato(rid);
+				relato = null;
 			}
 		}
-		atualizar(relato);
+		if(relato != null) {
+			atualizar(relato);
+		}
+	}
+	
+	public List<Relato> relatosPorUsuario(String usuarioId){		
+		return relatosRepository.findByUsuarioIn(usuarioId);
+	}
+	
+	public void remover(String rid) {		
+		Relato r = buscarPorId(rid);
+		relatosRepository.delete(r);
 	}
 }
