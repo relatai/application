@@ -67,6 +67,10 @@ public class RelatosServices {
 		return relatosRepository.findByUsuarioIn(usuarioId);
 	}
 	
+	public void removerSeuProprioRelatoSelecionado(String relatoId) {
+		categoriasServices.removerRelato(relatoId);
+	}
+	
 	public void remover(String rid) {		
 		Relato r = buscarPorId(rid);
 		relatosRepository.delete(r);

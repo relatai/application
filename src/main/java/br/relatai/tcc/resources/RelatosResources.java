@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,8 +33,7 @@ public class RelatosResources {
 	}
 	
 	@GetMapping(path="/{uid}/usuarios")
-	public ResponseEntity<?> meusRelatos(@PathVariable String uid){
-		//CacheControl cacheControl = CacheControl.maxAge(5, TimeUnit.SECONDS);
+	public ResponseEntity<?> meusRelatos(@PathVariable String uid){		
 		List<Relato> relatos = relatosServices.relatosPorUsuario(uid);	
 		return ResponseEntity.status(HttpStatus.OK).body(relatos);
 	}
@@ -44,4 +44,14 @@ public class RelatosResources {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{rid}").buildAndExpand(validacao.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@DeleteMapping(path="/{rid}/selecionados")
+	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado(@PathVariable String rid){
+		try {
+			relatosServices.removerSeuProprioRelatoSelecionado(rid);
+		}catch (EmptyResultDataAccessException e) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.noContent().build();		
+	}	
 }
