@@ -39,14 +39,14 @@ public class RelatosResources {
 	}
 	
 	@PostMapping(path="/{rid}/validacoes")
-	public ResponseEntity<Void> validar(@PathVariable String rid, @Valid @RequestBody Validacao validacao) {
+	public ResponseEntity<Void> validar(@PathVariable String rid, @Valid @RequestBody Validacao validacao) throws Exception {
 		relatosServices.validar(rid, validacao);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{rid}").buildAndExpand(validacao.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping(path="/{rid}/selecionados")
-	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado(@PathVariable String rid){
+	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado(@PathVariable String rid) throws Exception{
 		try {
 			relatosServices.removerSeuProprioRelatoSelecionado(rid);
 		}catch (EmptyResultDataAccessException e) {

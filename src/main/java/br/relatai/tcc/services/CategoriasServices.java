@@ -18,6 +18,9 @@ public class CategoriasServices {
 	@Autowired
 	private RelatosServices relatosServices;
 	
+	@Autowired 
+	private ConvertBase64AndUploadToCloudinaryImageService uploadToCloudinary;
+	
 	public List<Categoria> listar(){		
 		List<Categoria> categorias = categoriasRepository.findBySituacaoTrueOrderByNomeAsc();	
 		return categorias;
@@ -72,13 +75,14 @@ public class CategoriasServices {
 		return categoria;
 	}
 	
-	public void removerRelato(String relatoId) {
+	public void removerRelato(String relatoId) throws Exception {
 		Categoria categoria = categoriasRepository.findByRelatosIn(relatoId);
 		for(Relato r : categoria.getRelatos()) {			
 			if(r.getId().equals(relatoId)) {
 				categoria.getRelatos().remove(r);
 				categoriasRepository.save(categoria);
-				relatosServices.remover(relatoId);
+				relatosServices.remover(relatoId);				
+				uploadToCloudinary.removerImagem(r);				
 				break;
 			}			
 		}		

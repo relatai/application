@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 
+import br.relatai.tcc.dominio.Relato;
 import br.relatai.tcc.util.StaticGenericConstantResources;
 
 /**
@@ -71,9 +73,20 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 				"version", versao);
 
 		cloudinary.uploader().upload(this.convertedToFile, params);
-		cloudinary.url().version(versao).generate(this.convertedToFile.getName());
-
+		cloudinary.url().transformation(new Transformation().width(400).height(400).crop("limit")).version(versao).generate(this.convertedToFile.getName());
+		
 		this.cloudinaryImagemUrl = StaticGenericConstantResources.URL_UPLOADED + this.convertedToFile.getName();
+	}
+	
+	public void removerImagem(Relato relato) throws Exception {
+		Map<String, String> config = new HashMap<>();
+		config.put("cloud_name", StaticGenericConstantResources.CLOUD_NAME);
+		config.put("api_key", StaticGenericConstantResources.API_KEY);
+		config.put("api_secret", StaticGenericConstantResources.API_SECRET);
+
+		Cloudinary cloudinary = new Cloudinary(config);
+		String publicId = relato.getFoto().substring(relato.getFoto().lastIndexOf("/")+1, relato.getFoto().lastIndexOf("."));		
+		cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
 	}
 
 	private File converterImagemAPartirDeStringBase64() {

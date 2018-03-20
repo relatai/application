@@ -46,7 +46,7 @@ public class RelatosServices {
 		buscarPorId(relato.getId());
 	}
 	
-	public void validar(String rid, Validacao validacao) {
+	public void validar(String rid, Validacao validacao) throws Exception {
 		Relato relato = relatosRepository.findOne(rid);	
 		validacoesServices.salvar(validacao);
 		if(validacao.isReacao()) {			
@@ -67,7 +67,7 @@ public class RelatosServices {
 		return relatosRepository.findByUsuarioIn(usuarioId);
 	}
 	
-	public void removerSeuProprioRelatoSelecionado(String relatoId) {
+	public void removerSeuProprioRelatoSelecionado(String relatoId) throws Exception {
 		categoriasServices.removerRelato(relatoId);
 	}
 	
