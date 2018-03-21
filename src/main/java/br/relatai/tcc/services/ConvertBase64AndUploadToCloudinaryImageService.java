@@ -70,10 +70,11 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 		Map params = ObjectUtils.asMap("public_id", this.uuidFileName, 
 				"resource_type", "auto", 
 				"use_filename", true,
+				"transformation", new Transformation().width(400).height(400).crop("limit"),
 				"version", versao);
 
 		cloudinary.uploader().upload(this.convertedToFile, params);
-		cloudinary.url().transformation(new Transformation().width(400).height(400).crop("limit")).version(versao).generate(this.convertedToFile.getName());
+		cloudinary.url().version(versao).generate(this.convertedToFile.getName());
 		
 		this.cloudinaryImagemUrl = StaticGenericConstantResources.URL_UPLOADED + this.convertedToFile.getName();
 	}
