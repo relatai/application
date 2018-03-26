@@ -40,7 +40,7 @@ public class RelatosResources {
 	
 	@PostMapping(path="/{rid}/validacoes")
 	public ResponseEntity<Void> validar(@PathVariable String rid, @Valid @RequestBody Validacao validacao) throws Exception {
-		relatosServices.validar(rid, validacao);
+		relatosServices.reagir(rid, validacao);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{rid}").buildAndExpand(validacao.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}

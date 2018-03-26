@@ -21,8 +21,8 @@ public class Relato {
 	private LocalTime horaPublicacao;		
 	private String descricao;		
 	private Double latitude;		
-	private Double longitude;		
-	private String foto;	
+	private Double longitude;
+	private String foto;
 	private int confirmado;	
 	private int denunciado;	
 	private List<Validacao> validacoes;
