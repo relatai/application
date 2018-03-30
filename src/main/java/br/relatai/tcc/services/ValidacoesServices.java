@@ -2,7 +2,8 @@ package br.relatai.tcc.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import br.relatai.tcc.dominio.Validacao;
+
+import br.relatai.tcc.domain.Validacao;
 import br.relatai.tcc.repository.ValidacoesRepository;
 
 @Service

@@ -6,9 +6,12 @@ import java.util.Base64;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import br.relatai.tcc.dominio.Usuario;
+import br.relatai.tcc.domain.Usuario;
 import br.relatai.tcc.repository.UsuariosRepository;
 
+/*
+ *  Esta classe de serviço possui as regras de negócio para tratamento de operações realizadas nos usuários. 
+ */
 @Service
 public class UsuariosServices {
 

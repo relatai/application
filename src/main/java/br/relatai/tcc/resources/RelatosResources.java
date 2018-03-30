@@ -1,6 +1,5 @@
 package br.relatai.tcc.resources;
 
-import java.net.URI;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
@@ -8,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import br.relatai.tcc.dominio.Relato;
-import br.relatai.tcc.dominio.Validacao;
+import br.relatai.tcc.domain.ReacaoDTO;
+import br.relatai.tcc.domain.Relato;
+import br.relatai.tcc.domain.Validacao;
 import br.relatai.tcc.services.RelatosServices;
 
 @RestController
@@ -25,30 +24,29 @@ public class RelatosResources {
 		return relatosServices.listar();
 	}
 
-	@GetMapping(path="/{rid}")
-	public ResponseEntity<?> buscarPorId(@PathVariable String rid){
+	@GetMapping(path="/{relatoId}")
+	public ResponseEntity<?> buscarPorId(@PathVariable String relatoId){
 		CacheControl cacheControl = CacheControl.maxAge(5, TimeUnit.SECONDS);
-		Relato relato = relatosServices.buscarPorId(rid);	
+		Relato relato = relatosServices.buscarPorId(relatoId);	
 		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(relato);
 	}
 	
-	@GetMapping(path="/{uid}/usuarios")
-	public ResponseEntity<?> meusRelatos(@PathVariable String uid){		
-		List<Relato> relatos = relatosServices.relatosPorUsuario(uid);	
+	@GetMapping(path="/{usuarioId}/usuarios")
+	public ResponseEntity<?> meusRelatos(@PathVariable String usuarioId){		
+		List<Relato> relatos = relatosServices.relatosPorUsuario(usuarioId);	
 		return ResponseEntity.status(HttpStatus.OK).body(relatos);
 	}
 	
-	@PostMapping(path="/{rid}/validacoes")
-	public ResponseEntity<Void> validar(@PathVariable String rid, @Valid @RequestBody Validacao validacao) throws Exception {
-		relatosServices.reagir(rid, validacao);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{rid}").buildAndExpand(validacao.getId()).toUri();
-		return ResponseEntity.created(uri).build();
+	@PostMapping(path="/{relatoId}/validacoes")
+	public ResponseEntity<?> validar(@PathVariable String relatoId, @Valid @RequestBody Validacao validacao) throws Exception {
+		ReacaoDTO reacao = relatosServices.reagir(relatoId, validacao);
+		return ResponseEntity.status(HttpStatus.OK).body(reacao);
 	}
 	
-	@DeleteMapping(path="/{rid}/selecionados")
-	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado(@PathVariable String rid) throws Exception{
+	@DeleteMapping(path="/{relatoId}/selecionados")
+	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado(@PathVariable String relatoId) throws Exception{
 		try {
-			relatosServices.removerSeuProprioRelatoSelecionado(rid);
+			relatosServices.removerSeuProprioRelatoSelecionado(relatoId);
 		}catch (EmptyResultDataAccessException e) {
 			return ResponseEntity.notFound().build();
 		}

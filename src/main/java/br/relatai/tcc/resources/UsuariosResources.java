@@ -5,7 +5,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import br.relatai.tcc.dominio.Usuario;
+
+import br.relatai.tcc.domain.Usuario;
 import br.relatai.tcc.services.UsuariosServices;
 
 @RestController

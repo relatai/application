@@ -1,4 +1,4 @@
-package br.relatai.tcc.dominio;
+package br.relatai.tcc.domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,42 +11,46 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@Document(collection = "relato")
+@Document(collection = "relato") //Esta anotação define o nome da coleção associada no banco de dados.
 public class Relato {
 	
-	private String id;
+	private String id; // Atributo identificador do documento.
 	@DBRef
-	private List<Usuario> usuario;
-	private LocalDate dataPublicacao;		
-	private LocalTime horaPublicacao;		
-	private String descricao;		
-	private Double latitude;		
-	private Double longitude;
-	private String foto;
-	private int confirmado;	
-	private int denunciado;	
-	private List<Validacao> validacoes;
-	
-	public Relato() {}
+	private List<Usuario> usuario; // Este atributo foi definida como listagem para receber somente a vinculação do identificador.
+	private LocalDate dataPublicacao; // Este atributo recebe a data de criação do relato.
+	private LocalTime horaPublicacao; // Este atributo recebe a hora de criação do relato.
+	private String descricao; // Neste atributo, o usuário descreve o problema. 
+	private Double latitude; // Este atributo recebe a latitude do celular do usuário.
+	private Double longitude; // Este atributo recebe a longitude do celular do usuário.
+	private String foto; // O atributo foto armazena a URL da imagem associada no Cloudinary.
+	private int confirmado;	// Este atributo recebe a contagem de reações positivas realizadas por demais usuários.  
+	private int denunciado;	// Este atributo recebe a contagem de reações negativas realizadas por demais usuários.	
+	@DBRef
+	private List<Validacao> validacoes; // Atributo de vinculação de listagem das validações (reações) realizadas pelos usuários.
+		
+	public Relato() {} // Método construtor da classe padrão.
 
-	@Id
+	@Id // Anotação que define que o atributo receberá um identificador automaticamente pelo banco de dados.
 	public String getId() {return id;}
 	public void setId(String id) {this.id = id;}		
 	
 	public List<Usuario> getUsuario() {return usuario;}
 	public void setUsuario(List<Usuario> usuario) {this.usuario = usuario;}
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	// A anotação @Field define o nome do atributo no banco de dados.
+	// A data de publicação será devolvida do banco de dados no padrão brasileiro.	
 	@Field("data_publicacao")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")	
 	public LocalDate getDataPublicacao() {return dataPublicacao;}
 	public void setDataPublicacao(LocalDate dataPublicacao) {this.dataPublicacao = dataPublicacao;}
 	
+	// A hora de publicação será devolvida do banco de dados com fuso horário de São Paulo.
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "America/Sao_Paulo")
 	@Field("hora_publicacao")
 	public LocalTime getHoraPublicacao() {return horaPublicacao;}
 	public void setHoraPublicacao(LocalTime horaPublicacao) {this.horaPublicacao = horaPublicacao;}
 	
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(Include.NON_NULL) // Se o atributo estiver nula não será exibida.
 	public int getConfirmado() {return confirmado;}
 	public void setConfirmado(int confirmado) {this.confirmado = confirmado;}
 

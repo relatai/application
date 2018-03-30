@@ -2,7 +2,7 @@ package br.relatai.tcc.util;
 
 public class StaticGenericConstantResources {
 	/**
-	 * Configuraçoes para usar a API da Cloundinary
+	 * Configurações para usar a API da Cloundinary
 	 */
 	public static final String CLOUD_NAME = "relatai";
 	public static final String API_KEY = "913162516744173";

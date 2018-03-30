@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import br.relatai.tcc.dominio.Categoria;
-import br.relatai.tcc.dominio.Relato;
+import br.relatai.tcc.domain.Categoria;
+import br.relatai.tcc.domain.Relato;
 import br.relatai.tcc.services.CategoriasServices;
 import br.relatai.tcc.services.ConvertBase64AndUploadToCloudinaryImageService;
 
@@ -44,15 +44,15 @@ public class CategoriasResources {
 		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(categoriasServices.listar());
 	}	
 	
-	@PostMapping(path = "/{cid}/relatos")
-	public ResponseEntity<Void> relatar(@PathVariable String cid, @Valid @RequestBody Relato relato) throws IOException {				
+	@PostMapping(path = "/{categoriaId}/relatos")
+	public ResponseEntity<Void> relatar(@PathVariable String categoriaId, @Valid @RequestBody Relato relato) throws IOException {				
 		
 		relato.setFoto(uploadToCloudinary.mePassaStringBase64(relato.getFoto())
 				  .ireiConverter()
 				  .realizarUpload()
 				  .eRetornarUrlGeradaAposUpload());
 	
-		Categoria categoria = categoriasServices.relatar(cid, relato);		
+		Categoria categoria = categoriasServices.relatar(categoriaId, relato);		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(categoria.getId())

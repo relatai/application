@@ -2,17 +2,14 @@ package br.relatai.tcc.services;
 
 import java.io.*;
 import java.util.*;
-
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
-
-import br.relatai.tcc.dominio.Relato;
+import br.relatai.tcc.domain.Relato;
 import br.relatai.tcc.util.StaticGenericConstantResources;
 
 /**
