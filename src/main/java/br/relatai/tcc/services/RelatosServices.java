@@ -119,7 +119,7 @@ public class RelatosServices {
 					// outro voto no mesmo relato.
 					// Então, comparamos o identificador do usuário que está tentando votar com os
 					// identificadores já existentes dos usuários que já votaram.
-					if (!usuarioJaVotouId.equals(votanteId)) {						
+					if (!votanteId.equals(usuarioJaVotouId)) {						
 						// Se o identificador de usuário não for encontrado, o objeto de verificação
 						// será salvo como novo documento na collection "validacao".
 						// Inclusão do objeto de validação na lista de validações do objeto de relato.
