@@ -5,7 +5,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-/*
+/**
  * A classe RotinasAgendadas tem por objetivo criar um agendamento
  * de rotinas a serem verificadas automaticamente pela API.
  */

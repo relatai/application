@@ -14,7 +14,7 @@ import br.relatai.tcc.repository.RelatosRepository;
 import br.relatai.tcc.repository.ValidacoesRepository;
 import br.relatai.tcc.services.exceptions.ObjetoNaoEncontradoException;
 
-/*
+/**
  * Esta classe de serviço possui as regras de negócio para tratamento de operações realizadas nas categorias. 
  */
 @Service

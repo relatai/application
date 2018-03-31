@@ -22,6 +22,7 @@ import br.relatai.tcc.util.StaticGenericConstantResources;
  * 
  *         10/03/2018
  */
+// 
 @Component
 public final class ConvertBase64AndUploadToCloudinaryImageService {
 	private static final Logger logger = LoggerFactory.getLogger(ConvertBase64AndUploadToCloudinaryImageService.class);
