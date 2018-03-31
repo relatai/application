@@ -11,7 +11,7 @@ import br.relatai.tcc.repository.RelatosRepository;
 import br.relatai.tcc.repository.ValidacoesRepository;
 import br.relatai.tcc.services.exceptions.ObjetoNaoEncontradoException;
 
-/*
+/**
  * Esta classe de serviço contém as regras de negócio para tratamento de operações realizadas nos relatos.
  */
 @Service
@@ -29,14 +29,11 @@ public class RelatosServices {
 	@Autowired
 	private CategoriasServices categoriasServices;
 
-	// Método público que recupera um relato através de um identificador recebido
-	// via parâmetro.
+	// Método público que recupera um relato através de um identificador recebido via parâmetro.
 	public Relato buscarPorId(String id) {
-		// O objeto "relato" recebe o documento buscado pelo identificador na collection
-		// "relato".
+		// O objeto "relato" recebe o documento buscado pelo identificador na collection "relato".
 		Relato relato = relatosRepository.findOne(id);
-		// Verificação se o identificador recebido via parâmetro retornará um objeto
-		// nulo.
+		// Verificação se o identificador recebido via parâmetro retornará um objeto nulo.
 		if (relato == null) {
 			// Se a condição for verdadeira será disparada a mensagem abaixo.
 			throw new ObjetoNaoEncontradoException("O relato não pôde ser encontrado.");
@@ -46,25 +43,20 @@ public class RelatosServices {
 
 	// Método público para listar todos os relatos.
 	public List<Relato> listar() {
-		// O método default "findAll()" recupera todos os documentos da collection
-		// "relato".
+		// O método default "findAll()" recupera todos os documentos da collection "relato".
 		return relatosRepository.findAll();
 	}
 
 	// Método público para salvar um novo relato.
-	public Relato salvar(Relato relato) {
-		relato.setId(null); // Força o identificador do relato seja nulo para que o banco de dados o
-							// atribua.
-		// O retorno do relato salvo favorece a recuperação do identificador atribuído
-		// pelo
-		// banco de dados.
+	public Relato salvar(Relato relato) {		
+		relato.setId(null); // Força o identificador do relato seja nulo para que o banco de dados o atribua.
+		// O retorno do relato salvo favorece a recuperação do identificador atribuído pelo banco de dados.
 		return relatosRepository.save(relato);
 	}
 
 	// Método público para atualização de um relato existente.
 	public void atualizar(Relato relato) {
-		// Invocação do método que verifica se o objeto "relato" recebido por parâmetro
-		// de fato existe.
+		// Invocação do método que verifica se o objeto "relato" recebido por parâmetro de fato existe.
 		verificarExistencia(relato);
 		// O método "save()" de qualquer repositório Spring MongoDB exerce a função de
 		// salvar e também atualizar.
@@ -83,17 +75,14 @@ public class RelatosServices {
 	// votante serão recebidos
 	// através de um objeto Json e serializado no objeto validacao.
 	public ReacaoDTO reagir(String relatoId, Validacao validacao) throws Exception {
-		// Através do parâmetro relatoId será instanciado o objeto que possui o
-		// respectivo identificador.
+		// Através do parâmetro relatoId será instanciado o objeto que possui o respectivo identificador.
 		Relato relato = buscarPorId(relatoId);
 		String relatorId = relato.getUsuario().get(0).getId(); // Recupera o identificador do relator.
 		String votanteId = validacao.getUsuario().getId(); // Recupera o identificador do votante.
-		// A classe ReacaoDTO foi criada exclusivamente para dinamizar a exibição dos
-		// somatórios
+		// A classe ReacaoDTO foi criada exclusivamente para dinamizar a exibição dos somatórios
 		// dos atributos de contagem de um relato.
 		ReacaoDTO reacaoDTO = new ReacaoDTO();
-		// Recupera determinados atributos de relato e os atribui nos respectivos
-		// atributos de reacaoDTO.
+		// Recupera determinados atributos de relato e os atribui nos respectivos atributos de reacaoDTO.
 		reacaoDTO.setId(relato.getId());
 		reacaoDTO.setConfirmado(relato.getConfirmado());
 		reacaoDTO.setDenunciado(relato.getDenunciado());
@@ -102,8 +91,7 @@ public class RelatosServices {
 		if (!votanteId.equals(relatorId)) {
 			// Verifica se a lista de validações não existe no objeto "relato".
 			if (relato.getValidacoes() == null) {
-				// É necessário salvar o registro de validação antes de associá-lo na lista de
-				// validações do relato,
+				// É necessário salvar o registro de validação antes de associá-lo na lista de validações do relato,
 				// para não ocorrer exception.
 				salvarValidacao(validacao);
 				List<Validacao> validacoes = new ArrayList<>(); // Criação e instanciamento da lista "validacoes".
@@ -115,11 +103,10 @@ public class RelatosServices {
 				// Percorre cada elemento de validação da lista de validações do objeto relato.
 				for (Validacao v : relato.getValidacoes()) {
 					String usuarioJaVotouId = v.getUsuario().getId();
-					// Como regra de negócio, um usuário que já tenha votado não poderá realizar
-					// outro voto no mesmo relato.
-					// Então, comparamos o identificador do usuário que está tentando votar com os
-					// identificadores já existentes dos usuários que já votaram.
-					if (!votanteId.equals(usuarioJaVotouId)) {						
+					// Como regra de negócio, um usuário que já tenha votado não poderá realizar outro voto no mesmo relato.
+					// Então, comparamos o identificador do usuário que está tentando votar com os identificadores 
+					// já existentes dos usuários que já votaram.
+					if (!votanteId.equals(usuarioJaVotouId)) {
 						// Se o identificador de usuário não for encontrado, o objeto de verificação
 						// será salvo como novo documento na collection "validacao".
 						// Inclusão do objeto de validação na lista de validações do objeto de relato.
@@ -137,36 +124,42 @@ public class RelatosServices {
 		return reacaoDTO; // Retornamos a instância devidamente preenchida.
 	}
 
+	// Método privado que cria novo documento de validação na collection "validacao".
 	private Validacao salvarValidacao(Validacao validacao) {
+		// É necessário recuperarmos o objeto "validacao" com identificador defino no banco de dados,
+		// para que este objeto seja adicionado na lista do objeto relato.
 		return validacoesRepository.save(validacao);
 	}
 
+	// Método privado que recebe parâmetros para completar a parte de contabilização das reações. 
 	private void operacionalizarReacao(ReacaoDTO reacaoDTO, Relato relato, Validacao validacao) throws Exception {
-		// Se a reação for verdadeira o voto será computado no atributo "confirmacao"
+		// Se a reação for verdadeira, o voto será computado no atributo "confirmacao"
 		// das instâncias relato e reacaoDTO.
 		if (validacao.isReacao()) {
-			relato.setConfirmado(relato.getConfirmado() + 1);
-			reacaoDTO.setConfirmado(relato.getConfirmado());
-			reacaoDTO.setMensagem("Confirmação válida!");
+			// Incrementa 1 ao valor já existente no atributo "confirmado" do relato.
+			relato.setConfirmado(relato.getConfirmado() + 1); 
+			// O atributo "confirmado" do objeto reacaoDTO recebe o novo valor do atributo "confirmado" do relato. 
+			reacaoDTO.setConfirmado(relato.getConfirmado());			
+			reacaoDTO.setMensagem("Confirmação válida!"); // Mensagem que será enviada a aplicação cliente.
+			// Caso a reação seja negativa.
 		} else {
+			// Incrementa 1 ao valor já existente no atributo "denunciado" do relato.
 			relato.setDenunciado(relato.getDenunciado() + 1);
+			// O atributo "denunciado" do objeto reacaoDTO recebe o novo valor do atributo "denunciado" do relato. 
 			reacaoDTO.setDenunciado(relato.getDenunciado());
-			reacaoDTO.setMensagem("Denúncia válida!");
-			// Etapa que remove o relato caso a quantidade de confirmações seja inferior a
-			// 30 e a quantidade
-			// de denúncias seja igual a 5.
+			reacaoDTO.setMensagem("Denúncia válida!"); // Mensagem que será enviada a aplicação cliente.
+			// Etapa que remove o relato caso a quantidade de confirmações seja inferior a 30 
+			// e a quantidade de denúncias seja igual a 5.
 			if ((relato.getConfirmado() < 30) && (relato.getDenunciado() == 5)) {
-				categoriasServices.removerRelato(relato.getId());
-				relato = null;
+				categoriasServices.removerRelato(relato.getId()); // O método para remover o relato é invocado.
+				relato = null; // O objeto instanciado "relato" é anulado. 
 			}
 		}
 	}
 
-	// Método público que realiza busca de relatos criados por um determinado
-	// usuário.
+	// Método público que realiza busca de relatos criados por um determinado usuário.
 	public List<Relato> relatosPorUsuario(String usuarioId) {
-		// O método "findByUsuarioIn()" recupera todos os relatos que possuam o mesmo
-		// identificador
+		// O método "findByUsuarioIn()" recupera todos os relatos que possuam o mesmo identificador
 		// de usuário recebido via parâmetro.
 		return relatosRepository.findByUsuarioIn(usuarioId);
 	}
@@ -174,10 +167,8 @@ public class RelatosServices {
 	// Método público utilizado para remover um relato selecionado pelo próprio
 	// relator.
 	public void removerSeuProprioRelatoSelecionado(String relatoId) throws Exception {
-		// O método "removerRelato()" da regra de negócios de categorias é o método mais
-		// eficiente
-		// para remoção de um relato, pois apaga, simultaneamente, o relato na lista de
-		// relatos da
+		// O método "removerRelato()" da regra de negócios de categorias é o método mais eficiente
+		// para remoção de um relato, pois apaga, simultaneamente, o relato na lista de relatos da
 		// collection "categoria" e da collection "relato".
 		categoriasServices.removerRelato(relatoId);
 	}
