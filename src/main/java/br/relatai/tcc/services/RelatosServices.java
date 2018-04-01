@@ -1,7 +1,9 @@
 package br.relatai.tcc.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.relatai.tcc.domain.ReacaoDTO;
@@ -70,15 +72,15 @@ public class RelatosServices {
 		// Passamos o identificador do objeto "relato" via parâmetro.
 		buscarPorId(relato.getId());
 	}
-
+	
 	// Método que recebe a reação (voto) do usuário: Os detalhes da reação do
 	// votante serão recebidos
 	// através de um objeto Json e serializado no objeto validacao.
 	public ReacaoDTO reagir(String relatoId, Validacao validacao) throws Exception {
 		// Através do parâmetro relatoId será instanciado o objeto que possui o respectivo identificador.
 		Relato relato = buscarPorId(relatoId);
-		String relatorId = relato.getUsuario().get(0).getId(); // Recupera o identificador do relator.
-		String votanteId = validacao.getUsuario().getId(); // Recupera o identificador do votante.
+		String relatorId = relato.getUsuario().get(0).getId();
+		String votanteId = validacao.getUsuario().getId();
 		// A classe ReacaoDTO foi criada exclusivamente para dinamizar a exibição dos somatórios
 		// dos atributos de contagem de um relato.
 		ReacaoDTO reacaoDTO = new ReacaoDTO();
@@ -86,42 +88,31 @@ public class RelatosServices {
 		reacaoDTO.setId(relato.getId());
 		reacaoDTO.setConfirmado(relato.getConfirmado());
 		reacaoDTO.setDenunciado(relato.getDenunciado());
-		reacaoDTO.setMensagem("Reação não computada: relator do problema ou usuário que já tenha votado.");
-		// Verifica se os identificadores de ambos usuários são diferentes.
-		if (!votanteId.equals(relatorId)) {
-			// Verifica se a lista de validações não existe no objeto "relato".
-			if (relato.getValidacoes() == null) {
-				// É necessário salvar o registro de validação antes de associá-lo na lista de validações do relato,
-				// para não ocorrer exception.
+		reacaoDTO.setMensagem("Reação não computada: relator do problema ou usuário que já tenha votado.");		
+		Set<String> usuariosSet = new HashSet<String>();		
+		if(relato.getValidacoes() != null) {
+			for(Validacao v : relato.getValidacoes()) {
+				usuariosSet.add(v.getUsuario().getId());				
+			}			
+		}		
+		if(!relatorId.equals(votanteId)) {
+			if(usuariosSet.contains(votanteId)) {				
+			}else {
 				salvarValidacao(validacao);
-				List<Validacao> validacoes = new ArrayList<>(); // Criação e instanciamento da lista "validacoes".
-				validacoes.add(validacao); // Inclusão do objeto de validação na lista de validações.
-				relato.setValidacoes(validacoes); // Inclusão da lista de validações na lista de validações do relato.
+				if(relato.getValidacoes() == null) {
+					ArrayList<Validacao> validacoes = new ArrayList<>();
+					validacoes.add(validacao);
+					relato.setValidacoes(validacoes);
+				}else {
+					relato.getValidacoes().add(validacao);
+				}			
 				operacionalizarReacao(reacaoDTO, relato, validacao);
-				// Caso a lista de validações exista.
-			} else {
-				// Percorre cada elemento de validação da lista de validações do objeto relato.
-				for (Validacao v : relato.getValidacoes()) {
-					String usuarioJaVotouId = v.getUsuario().getId();
-					// Como regra de negócio, um usuário que já tenha votado não poderá realizar outro voto no mesmo relato.
-					// Então, comparamos o identificador do usuário que está tentando votar com os identificadores 
-					// já existentes dos usuários que já votaram.
-					if (!votanteId.equals(usuarioJaVotouId)) {
-						// Se o identificador de usuário não for encontrado, o objeto de verificação
-						// será salvo como novo documento na collection "validacao".
-						// Inclusão do objeto de validação na lista de validações do objeto de relato.
-						relato.getValidacoes().add(salvarValidacao(validacao));
-						operacionalizarReacao(reacaoDTO, relato, validacao);
-						break; // Interrupção da verificação após realização da linha anterior.
-					}
+				if (relato != null) {
+					atualizar(relato);
 				}
-			}
-		}
-		// Por fim, o relato não sendo nulo, é atualizado.
-		if (relato != null) {
-			atualizar(relato);
-		}
-		return reacaoDTO; // Retornamos a instância devidamente preenchida.
+			}			
+		}		
+		return reacaoDTO;		
 	}
 
 	// Método privado que cria novo documento de validação na collection "validacao".

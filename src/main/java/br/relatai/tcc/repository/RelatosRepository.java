@@ -3,6 +3,7 @@ package br.relatai.tcc.repository;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import br.relatai.tcc.domain.Relato;
+import br.relatai.tcc.domain.Validacao;
 
 /*
  * Esta é a camada que acessa a collection relato na base de dados.  
@@ -10,4 +11,5 @@ import br.relatai.tcc.domain.Relato;
 public interface RelatosRepository extends MongoRepository<Relato, String>{
 	// Método que realiza busca de um determinado usuário através do identificador na lista de relatos.
 	List<Relato> findByUsuarioIn(String usuarioId);
+	List<Validacao> findByValidacoes();
 }
