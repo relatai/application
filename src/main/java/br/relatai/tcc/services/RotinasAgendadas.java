@@ -21,7 +21,7 @@ public class RotinasAgendadas {
 	private CategoriasServices categoriasServices;
 	
 	// O agendamento define que todos os dias, às 03h, o método "verificarRelatosAbandonados()" é executado.
-	@Scheduled(cron = "0 0 3 * * *", zone = TIME_ZONE)
+	@Scheduled(cron = "0 * 21 * * *", zone = TIME_ZONE)
 	public void verificarRelatosAbandonados() throws Exception {
 		// Execução do método RemoverRelatosAbandonados().
 		categoriasServices.RemoverRelatosAbandonados();

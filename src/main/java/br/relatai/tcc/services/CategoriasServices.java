@@ -114,30 +114,28 @@ public class CategoriasServices {
 	
 	// Método que remove relatos considerados abandonados na aplicação, obedecendo a determinados critérios.
 	public void RemoverRelatosAbandonados() throws Exception {
-		int dias; // Variável inteira que recebe a quantidade de dias.
-		List<Relato> relatos = null; // Cria uma lista de relatos.
-		relatos = relatosRepository.findAll(); // Lista todos os relatos registrados.
+		int dias; // Variável inteira que recebe a quantidade de dias.		
 		// Laço que verifica cada relato dentro da lista de relatos.
-		for(Relato r : relatos) {
+		for(Relato r : relatosRepository.findAll()) {
 			// O método between recebe duas datas, calcula o intervalo e retorna em dias para variável dias.
 			dias = Period.between(r.getDataPublicacao(), LocalDate.now()).getDays();
 			// Verifica se o valor do atributo "confirmado" permanece igual a zero acima de dois dias.
 			// E, também verifica se o mesmo atributo permanece com valor inferior a trinta acima de seis dias.
-			if(((r.getConfirmado() == 0) && (dias > 1)) || ((r.getConfirmado() < 30) && (dias > 6))) {
+			if(((r.getConfirmado() == 0) && (dias > 1)) || ((r.getConfirmado() < 30) && (dias > 6))) {				
 				removerRelato(r.getId()); // O método removerRelato() é invocado.				
-			}
-			continue; // Retoma o looping.
+				continue; // Retoma o looping.
+			}			
 		}
 	}
 	
 	// Método público que remove um determinado relato da lista da collection "categoria" e simultaneamente
 	// da collection "relato".
-	public void removerRelato(String relatoId) throws Exception {		
+	public void removerRelato(String relatoId) throws Exception {	
 		// O método "findByRelatosIn()" verifica se o identificador de relato recebido via parâmetro existe
 		// em algum relato criado dentro de uma categoria. Essa categoria é atribuída ao objeto "categoria".		
 		Categoria categoria = categoriasRepository.findByRelatosIn(relatoId);		
 		// Em cada relato dentro da categoria instanciada será executada a rotina a seguir.
-		for(Relato r : categoria.getRelatos()) {			
+		for(Relato r : categoria.getRelatos()) {
 			// Verifica se o identificador da referência "r" do objeto "relato" é igual ao identificador
 			// recebido via parâmetro.
 			if(r.getId().equals(relatoId)) {
@@ -150,7 +148,7 @@ public class CategoriasServices {
 					}					
 				}
 				// O método "remove()" apaga o item, recebido via parâmetro, da lista de relatos.
-				categoria.getRelatos().remove(r); 
+				categoria.getRelatos().remove(r);
 				categoriasRepository.save(categoria); // A categoria é atualizada.
 				relatosRepository.delete(relatoId); // O documento é removido da collection "relato". 
 				uploadToCloudinary.removerImagem(r); // A imagem é removida do cloudinary.
