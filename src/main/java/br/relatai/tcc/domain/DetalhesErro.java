@@ -1,6 +1,6 @@
 package br.relatai.tcc.domain;
 
-/*
+/**
  * Classe auxiliar que retorna mensagem quando exceções são disparadas.
  */
 public class DetalhesErro {
@@ -22,5 +22,7 @@ public class DetalhesErro {
 	public void setTimestamp(Long timestamp) {this.timestamp = timestamp;}
 
 	public String getMensagemDesenvolvedor() {return mensagemDesenvolvedor;}
-	public void setMensagemDesenvolvedor(String mensagemDesenvolvedor) {this.mensagemDesenvolvedor = mensagemDesenvolvedor;}
+	public void setMensagemDesenvolvedor(String mensagemDesenvolvedor) {
+		this.mensagemDesenvolvedor = mensagemDesenvolvedor;
+	}
 }

@@ -6,17 +6,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-/*
+/**
  * A existência de usuários cadastrados tem a finalidade de controlarmos os papéis
  * que cada usuário pode exercer no uso da aplicação, hora relator, hora votante ou anônimo.  
  */
-
-@Document(collection="usuario") //Esta anotação define o nome da coleção associada no banco de dados.
+//Esta anotação define o nome da coleção associada no banco de dados.
+@Document(collection="usuario") 
 public class Usuario {
 
 	private String id; // Atributo identificador do documento.
 	private String celular;	 // Atributo que recebe o número do celular cifrado em Base64.
-	private LocalDate dataCadastro;  // Atributo que armazena a data em que o usuário realizou o cadastro.
+	private LocalDate dataCadastro;  // Atributo que armazena a data de cadastro do usuário.
 	
 	public Usuario() {} // Método construtor da classe padrão.
 	
@@ -27,7 +27,7 @@ public class Usuario {
 		this.dataCadastro = dataCadastro;
 	}
 	
-	@Id // Anotação que define que a propriedade receberá um identificador automaticamente pelo banco de dados.
+	@Id // Anotação que define que a propriedade receberá um identificador automaticamente.
 	public String getId() {return id;}
 	public void setId(String id) {this.id = id;}		
 	

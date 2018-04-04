@@ -33,7 +33,15 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 	private String cloudinaryImagemUrl;
 	private String uuidFileName;
 	private File convertedToFile;
+	private Map<String, String> config;
 
+	public ConvertBase64AndUploadToCloudinaryImageService() {
+		config = new HashMap<>(); // Cria-se um mapa de strings.
+		config.put("cloud_name", StaticGenericConstantResources.CLOUD_NAME); // Atribuímos a primeira chave/valor.
+		config.put("api_key", StaticGenericConstantResources.API_KEY); // Atribuímos a segunda chave/valor.
+		config.put("api_secret", StaticGenericConstantResources.API_SECRET);  // Atribuímos a terceira chave/valor.
+	}
+	
 	// Método público que recebe o nome da imagem convertida em base64.
 	public ConvertBase64AndUploadToCloudinaryImageService mePassaStringBase64(String stringImageBase64) {
 		// A variável "uuidFileName" receberá um identificador gerado aleatoriamente.
@@ -60,20 +68,11 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 		return this.cloudinaryImagemUrl;
 	}
 	
-	// Método privado auxiliar para definir um mapa de parâmetros de acesso a conta no Cloudinary.  
-	private Map<String, String> configurarConta(){
-		Map<String, String> config = new HashMap<>(); // Cria-se um mapa de strings.
-		config.put("cloud_name", StaticGenericConstantResources.CLOUD_NAME); // Atribuímos a primeira chave/valor.
-		config.put("api_key", StaticGenericConstantResources.API_KEY); // Atribuímos a segunda chave/valor.
-		config.put("api_secret", StaticGenericConstantResources.API_SECRET);  // Atribuímos a terceira chave/valor.
-		return config; // Após definição do mapa, o mesmo é retornado.
-	}
-
 	// Método auxiliar privado que realiza a conexão com o Cloudinary e envia a imagem.
 	private void fazerUpload() throws IOException {
-		int versao = LocalDate.now().getYear();	// Atribuímos a variável "versao" o ano corrente.
+		int versao = LocalDate.now().getYear();	// Atribuímos a variável "versao" o ano corrente.		
 		// O método "configurarConta()" é invocado e passado como parâmetro para o construtor da classe.
-		Cloudinary cloudinary = new Cloudinary(configurarConta()); 
+		Cloudinary cloudinary = new Cloudinary(config); 
 		logger.info("File: " + this.uuidFileName); // Logger do tipo info é escrito com a identificação do arquivo.
 		// É criado um mapa de parâmetros que define propriedades da imagem. 
 		@SuppressWarnings("rawtypes")
@@ -93,9 +92,9 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 	}
 	
 	// Método público que remove no Cloudinary a imagem associada a um relato. 
-	public void removerImagem(Relato relato) throws Exception {
+	public void removerImagem(Relato relato) throws Exception {		
 		// Instancia um objeto "cloudinary" com as configurações da conta.
-		Cloudinary cloudinary = new Cloudinary(configurarConta()); 
+		Cloudinary cloudinary = new Cloudinary(config); 
 		// Recuperação do "public_id" extraído da URL salva no registro de relato. 
 		String publicId = relato.getFoto().substring(relato.getFoto().lastIndexOf("/")+1, relato.getFoto().lastIndexOf("."));
 		// Remoção da imagem no Cloudinary através do "public_id" recuperado na linha anterior.
@@ -104,7 +103,8 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 
 	// O método privado devolve um arquivo gerado a partir de uma string base64.
 	private File converterImagemAPartirDeStringBase64() {
-		// Atribui o valor de "stringImageBase64" sem as vírgulas no array "base64".
+		// Atribui o valor de "stringImageBase64" removendo uma contra-barra onde encontrar
+		// duas contra-barras no array "base64".
 		String[] base64 = this.stringImageBase64.split("\\,");  
 		String extensao = base64[0].split("\\;")[0].split("\\/")[1]; // Recupera a extensão da imagem.
 		// A variável "tmpDir" recebe o caminho do diretório temporário do Sistema Operacional.
