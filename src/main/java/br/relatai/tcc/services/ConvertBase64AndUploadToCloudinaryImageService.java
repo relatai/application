@@ -33,14 +33,7 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 	private String cloudinaryImagemUrl;
 	private String uuidFileName;
 	private File convertedToFile;
-	private Map<String, String> config;
-
-	public ConvertBase64AndUploadToCloudinaryImageService() {
-		config = new HashMap<>(); // Cria-se um mapa de strings.
-		config.put("cloud_name", StaticGenericConstantResources.CLOUD_NAME); // Atribuímos a primeira chave/valor.
-		config.put("api_key", StaticGenericConstantResources.API_KEY); // Atribuímos a segunda chave/valor.
-		config.put("api_secret", StaticGenericConstantResources.API_SECRET);  // Atribuímos a terceira chave/valor.
-	}
+	private Map<String, String> config;	
 	
 	// Método público que recebe o nome da imagem convertida em base64.
 	public ConvertBase64AndUploadToCloudinaryImageService mePassaStringBase64(String stringImageBase64) {
@@ -70,6 +63,7 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 	
 	// Método auxiliar privado que realiza a conexão com o Cloudinary e envia a imagem.
 	private void fazerUpload() throws IOException {
+		autenticarConta();
 		int versao = LocalDate.now().getYear();	// Atribuímos a variável "versao" o ano corrente.		
 		// O método "configurarConta()" é invocado e passado como parâmetro para o construtor da classe.
 		Cloudinary cloudinary = new Cloudinary(config); 
@@ -92,13 +86,22 @@ public final class ConvertBase64AndUploadToCloudinaryImageService {
 	}
 	
 	// Método público que remove no Cloudinary a imagem associada a um relato. 
-	public void removerImagem(Relato relato) throws Exception {		
+	public void removerImagem(Relato relato) throws Exception {	
+		autenticarConta();
 		// Instancia um objeto "cloudinary" com as configurações da conta.
 		Cloudinary cloudinary = new Cloudinary(config); 
 		// Recuperação do "public_id" extraído da URL salva no registro de relato. 
 		String publicId = relato.getFoto().substring(relato.getFoto().lastIndexOf("/")+1, relato.getFoto().lastIndexOf("."));
 		// Remoção da imagem no Cloudinary através do "public_id" recuperado na linha anterior.
 		cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+	}
+	
+	// Método privado de autenticação da conta do Cloudinary.
+	private void autenticarConta() {
+		config = new HashMap<>(); // Instancia-se o mapa que receberá os dados de autenticação.
+		config.put("cloud_name", StaticGenericConstantResources.CLOUD_NAME); // Atribuímos a primeira chave/valor.
+		config.put("api_key", StaticGenericConstantResources.API_KEY); // Atribuímos a segunda chave/valor.
+		config.put("api_secret", StaticGenericConstantResources.API_SECRET);  // Atribuímos a terceira chave/valor.
 	}
 
 	// O método privado devolve um arquivo gerado a partir de uma string base64.
