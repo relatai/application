@@ -27,7 +27,7 @@ public class RotinasAgendadas {
 	}
 	
 	// O agendamento define que todos os dias, às 03h, o método "verificarRelatosAbandonados()" é executado.
-	@Scheduled(cron = "0 40 10 * * *", zone = TIME_ZONE)
+	@Scheduled(cron = "0 45 10 * * *", zone = TIME_ZONE)
 	public void verificarRelatosAbandonados() throws Exception {
 		// Execução do método RemoverRelatosAbandonados().
 		System.out.println("Executando rotina de remoção de relatos abandonados!");
