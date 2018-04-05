@@ -88,31 +88,41 @@ public class RelatosServices {
 		reacaoDTO.setId(relato.getId());
 		reacaoDTO.setConfirmado(relato.getConfirmado());
 		reacaoDTO.setDenunciado(relato.getDenunciado());
+		// Mensagem padrão caso a reação não seja computada.
 		reacaoDTO.setMensagem("Reação não computada: relator do problema ou usuário que já tenha votado.");		
-		Set<String> usuariosSet = new HashSet<String>();		
+		Set<String> usuariosSet = new HashSet<String>(); // Array que não recebe valores duplicados.
+		// Condição que verifica se a lista de validações em relato existe. 
 		if(relato.getValidacoes() != null) {
+			// Recupera cada validação existente na lista de validações.
 			for(Validacao v : relato.getValidacoes()) {
-				usuariosSet.add(v.getUsuario().getId());				
+				// Adiciona cada identificador de usuário encontrado no array "usuariosSet".
+				usuariosSet.add(v.getUsuario().getId());			
 			}			
-		}		
+		}	
+		// Verifica se o relator é diferente do votante.
 		if(!relatorId.equals(votanteId)) {
+			// Verifica se na lista de identificadores do array "usuariosSet" já contém o votante.
 			if(usuariosSet.contains(votanteId)) {				
-			}else {
-				salvarValidacao(validacao);
-				if(relato.getValidacoes() == null) {
-					ArrayList<Validacao> validacoes = new ArrayList<>();
-					validacoes.add(validacao);
-					relato.setValidacoes(validacoes);
-				}else {
-					relato.getValidacoes().add(validacao);
-				}			
-				operacionalizarReacao(reacaoDTO, relato, validacao);
-				if (relato != null) {
-					atualizar(relato);
+			}else { // Caso valor retornado seja false dará continuidade ao algoritmo.
+				salvarValidacao(validacao); // Persiste os dados de validação. 
+				// Se não existir lista de validações no objeto "relato".
+				if(relato.getValidacoes() == null) {					
+					ArrayList<Validacao> validacoes = new ArrayList<>(); // Cria-se um array de validações.
+					validacoes.add(validacao); // Adiciona-se no array o objeto de validação.
+					// adiciona-se o array "validacoes" na lista de validações de relato.
+					relato.setValidacoes(validacoes); 
+				}else { // Se a lista de validações já existir.
+					// Adiciona-se o objeto "validacao" na lista de validações do relato.
+					relato.getValidacoes().add(validacao); 
+				}
+				// Invocação do método que faz a contagem de reações.
+				operacionalizarReacao(reacaoDTO, relato, validacao); 
+				if (relato != null) { // Se o relato não for nulo.
+					atualizar(relato); // Atualiza-se o relato na collection.
 				}
 			}			
 		}		
-		return reacaoDTO;		
+		return reacaoDTO; // Retorna o objeto "reacaoDTO".
 	}
 
 	// Método privado que cria novo documento de validação na collection "validacao".
@@ -155,8 +165,7 @@ public class RelatosServices {
 		return relatosRepository.findByUsuarioIn(usuarioId);
 	}
 
-	// Método público utilizado para remover um relato selecionado pelo próprio
-	// relator.
+	// Método público utilizado para remover um relato selecionado pelo próprio relator.
 	public void removerSeuProprioRelatoSelecionado(String relatoId) throws Exception {
 		// O método "removerRelato()" da regra de negócios de categorias é o método mais eficiente
 		// para remoção de um relato, pois apaga, simultaneamente, o relato na lista de relatos da
