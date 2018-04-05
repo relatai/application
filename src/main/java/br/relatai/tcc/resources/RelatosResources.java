@@ -39,10 +39,13 @@ public class RelatosResources {
 				.cacheControl(cacheControl)
 				.body(relato);
 	}
-	
+	// Método que lista todos os relatos de um determinado usuário.
 	@GetMapping(path="/{usuarioId}/usuarios")
-	public ResponseEntity<?> meusRelatos(@PathVariable String usuarioId){		
-		List<Relato> relatos = relatosServices.relatosPorUsuario(usuarioId);	
+	public ResponseEntity<?> meusRelatos(@PathVariable String usuarioId){
+		// A lista será construída após recuperação dos relatos através do identificador
+		// de usuário recebido via URI. 
+		List<Relato> relatos = relatosServices.relatosPorUsuario(usuarioId);
+		// Se o status da resposta for OK, a lista de "relatos" será devolvida.
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(relatos);

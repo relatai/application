@@ -21,13 +21,13 @@ public class RotinasAgendadas {
 	private CategoriasServices categoriasServices;
 	
 	// O agendamento define a execução do comando de mensagem apenas para manter o servidor ativo.
-	@Scheduled(cron = "0 29 * * * *", zone = TIME_ZONE)
+	@Scheduled(cron = "0 5 * * * *", zone = TIME_ZONE)
 	public void manterServidorAtivo() {
 		System.out.println("Inibição de desligamento do servidor.");
 	}
 	
 	// O agendamento define que todos os dias, às 03h, o método "verificarRelatosAbandonados()" é executado.
-	@Scheduled(cron = "0 45 10 * * *", zone = TIME_ZONE)
+	@Scheduled(cron = "0 12 14 * * *", zone = TIME_ZONE)
 	public void verificarRelatosAbandonados() throws Exception {
 		// Execução do método RemoverRelatosAbandonados().
 		System.out.println("Executando rotina de remoção de relatos abandonados!");
