@@ -6,7 +6,8 @@ import br.relatai.tcc.domain.Validacao;
 import br.relatai.tcc.repository.ValidacoesRepository;
 
 /**
- * Esta classe de serviço possui a regra de negócio para inclusão de validações na base de dados. 
+ * Esta classe de serviço possui a regra de negócio para inclusão de 
+ * validações na base de dados. 
  */
 @Service
 public class ValidacoesServices {
@@ -15,9 +16,13 @@ public class ValidacoesServices {
 	@Autowired
 	private ValidacoesRepository validacoesRepository;
 	
-	// Método público que recebe um objeto "validacao" por parâmetro e o salva.
+	// Método público que recebe um objeto "validacao" por parâmetro 
+	// e o salva.
 	public void salvar(Validacao validacao) {
-		validacao.setId(null); // Força o identificador do objeto ser nulo.
-		validacoesRepository.save(validacao); // Salva o objeto no banco de dados.
+		// Força o identificador do objeto ser nulo.
+		validacao.setId(null); 
+		// Salva o objeto no banco de dados.
+		validacoesRepository.save(validacao); 
 	}
 }
+

@@ -8,36 +8,47 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-/*
- * A classe Validacao tem por finalidade de manter o registro de cada votação realizada por usuário
- * cadastrado pela aplicação.
+/**
+ * A classe Validacao tem por finalidade de manter o registro de cada votação 
+ * realizada por usuário cadastrado pela aplicação.
  */
-@Document(collection="validacao") //Esta anotação define o nome da coleção associada no banco de dados.
+// Esta anotação define o nome da coleção associada no banco de dados.
+@Document(collection="validacao") 
 public class Validacao {
-
-	private String id; // Atributo identificador do documento..
-	private Usuario usuario; // Atributo que associa o usuário votante.  
-	private LocalDate data; // Atributo que armazena a data em que o usuário realiza a votação.
-	private LocalTime hora;	 // Atributo que armazena a hora em que o usuário realiza a votação.
-	private String descricao;  // Atributo que registra a descrição caso o usuário realize uma denúncia.
-	private boolean reacao;  // Atributo que recebe true (para confirmação) ou false (para denúncia).
+	// Atributo identificador do documento.
+	private String id; 
+	// Atributo que associa o usuário votante.
+	private Usuario usuario;   
+	// Atributo que armazena a data em que o usuário realiza a votação.
+	private LocalDate data; 
+	// Atributo que armazena a hora em que o usuário realiza a votação.
+	private LocalTime hora;	 
+	// Atributo que registra a descrição caso o usuário realize uma denúncia.
+	private String descricao; 
+	// Atributo que recebe true (para confirmação) ou false (para denúncia).
+	private boolean reacao;  
 		
 	public Validacao() {} // Método construtor da classe padrão.
 
-	@Id // Anotação que define que o atributo receberá um identificador automaticamente pelo banco de dados.
+	// Anotação que define que o atributo receberá um identificador 
+	// automaticamente pelo banco de dados.
+	@Id 
 	public String getId() {return id;}
 	public void setId(String id) {this.id = id;}
 	
 	public Usuario getUsuario() {return usuario;}
 	public void setUsuario(Usuario usuario) {this.usuario = usuario;}
 
-	// A data de publicação será devolvida do banco de dados no padrão brasileiro.
+	// A data de publicação será devolvida do banco de dados
+	// no padrão brasileiro.
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	public LocalDate getData() {return data;}
 	public void setData(LocalDate data) {this.data = data;}
 
-	// A hora de publicação será devolvida do banco de dados com fuso horário de São Paulo.
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="HH:mm", timezone="America/Sao_Paulo")
+	// A hora de publicação será devolvida do banco de dados com 
+	// fuso horário de São Paulo.
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="HH:mm", 
+			timezone="America/Sao_Paulo")
 	public LocalTime getHora() {return hora;}
 	public void setHora(LocalTime hora) {this.hora = hora;}
 
@@ -48,7 +59,7 @@ public class Validacao {
 	public boolean isReacao() {return reacao;}
 	public void setReacao(boolean reacao) {this.reacao = reacao;}	
 	
-
+	// Sobrescrita do método "hashCode()".
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -57,6 +68,7 @@ public class Validacao {
 		return result;
 	}
 
+	// Sobrescrita do método "equals()".
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

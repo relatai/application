@@ -11,26 +11,43 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@Document(collection = "relato") //Esta anotação define o nome da coleção associada no banco de dados.
+//Esta anotação define o nome da coleção associada no banco de dados.
+@Document(collection = "relato") 
 public class Relato {
 	
 	private String id; // Atributo identificador do documento.
+	// Este atributo foi definida como listagem para receber somente 
+	// a vinculação do identificador.
 	@DBRef
-	private List<Usuario> usuario; // Este atributo foi definida como listagem para receber somente a vinculação do identificador.
-	private LocalDate dataPublicacao; // Este atributo recebe a data de criação do relato.
-	private LocalTime horaPublicacao; // Este atributo recebe a hora de criação do relato.
-	private String descricao; // Neste atributo, o usuário descreve o problema. 
-	private Double latitude; // Este atributo recebe a latitude do celular do usuário.
-	private Double longitude; // Este atributo recebe a longitude do celular do usuário.
-	private String foto; // O atributo foto armazena a URL da imagem associada no Cloudinary.
-	private int confirmado;	// Este atributo recebe a contagem de reações positivas realizadas por demais usuários.  
-	private int denunciado;	// Este atributo recebe a contagem de reações negativas realizadas por demais usuários.	
+	private List<Usuario> usuario; 
+	// Este atributo recebe a data de criação do relato.
+	private LocalDate dataPublicacao; 
+	// Este atributo recebe a hora de criação do relato.
+	private LocalTime horaPublicacao;
+	// Neste atributo, o usuário descreve o problema.
+	private String descricao;
+	// Este atributo recebe a latitude do celular do usuário.
+	private Double latitude; 
+	// Este atributo recebe a longitude do celular do usuário.
+	private Double longitude;
+	// O atributo foto armazena a URL da imagem associada no Cloudinary.
+	private String foto; 
+	// Este atributo recebe a contagem de reações positivas realizadas  
+	// por demais usuários.
+	private int confirmado;	
+	// Este atributo recebe a contagem de reações negativas realizadas 
+	// por demais usuários.
+	private int denunciado;		
+	// Atributo de vinculação de listagem das validações (reações) 
+	// realizadas pelos usuários.
 	@DBRef
-	private List<Validacao> validacoes; // Atributo de vinculação de listagem das validações (reações) realizadas pelos usuários.
+	private List<Validacao> validacoes; 
 		
 	public Relato() {} // Método construtor da classe padrão.
 
-	@Id // Anotação que define que o atributo receberá um identificador automaticamente pelo banco de dados.
+	// Anotação que define que o atributo receberá um identificador 
+	// automaticamente pelo banco de dados.
+	@Id 
 	public String getId() {return id;}
 	public void setId(String id) {this.id = id;}		
 	
@@ -42,15 +59,21 @@ public class Relato {
 	@Field("data_publicacao")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")	
 	public LocalDate getDataPublicacao() {return dataPublicacao;}
-	public void setDataPublicacao(LocalDate dataPublicacao) {this.dataPublicacao = dataPublicacao;}
+	public void setDataPublicacao(LocalDate dataPublicacao) {
+		this.dataPublicacao = dataPublicacao;
+	}
 	
-	// A hora de publicação será devolvida do banco de dados com fuso horário de São Paulo.
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "America/Sao_Paulo")
+	// A hora de publicação será devolvida do banco de dados com 
+	// fuso horário de São Paulo.
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", 
+			timezone = "America/Sao_Paulo")
 	@Field("hora_publicacao")
 	public LocalTime getHoraPublicacao() {return horaPublicacao;}
-	public void setHoraPublicacao(LocalTime horaPublicacao) {this.horaPublicacao = horaPublicacao;}
+	public void setHoraPublicacao(LocalTime horaPublicacao) {
+		this.horaPublicacao = horaPublicacao;
+	}
 	
-	@JsonInclude(Include.NON_NULL) // Se o atributo estiver nula não será exibida.
+	@JsonInclude(Include.NON_NULL) // Se o atributo estiver nulo não será exibido.
 	public int getConfirmado() {return confirmado;}
 	public void setConfirmado(int confirmado) {this.confirmado = confirmado;}
 
@@ -73,9 +96,11 @@ public class Relato {
 	
 	@JsonInclude(Include.NON_NULL)
 	public List<Validacao> getValidacoes() {return validacoes;}
-	public void setValidacoes(List<Validacao> validacoes) {this.validacoes = validacoes;}
+	public void setValidacoes(List<Validacao> validacoes) {
+		this.validacoes = validacoes;
+	}
 
-	@Override
+	@Override // Sobrescrita do método "hashCode()"
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -83,7 +108,7 @@ public class Relato {
 		return result;
 	}
 
-	@Override
+	@Override // Sobrescrita do método "equals()" 
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -98,7 +123,5 @@ public class Relato {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-	
+	}	
 }

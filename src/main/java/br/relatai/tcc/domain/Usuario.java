@@ -40,6 +40,7 @@ public class Usuario {
 	public LocalDate getDataCadastro() {return dataCadastro;}
 	public void setDataCadastro(LocalDate dataCadastro) {this.dataCadastro = dataCadastro;}
 
+	// Sobrescrita do método "hashCode()"
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -48,6 +49,7 @@ public class Usuario {
 		return result;
 	}
 
+	// Sobrescrita do método "equals()"
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

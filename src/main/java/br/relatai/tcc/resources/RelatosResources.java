@@ -39,11 +39,12 @@ public class RelatosResources {
 				.cacheControl(cacheControl)
 				.body(relato);
 	}
-	// Método que lista todos os relatos de um determinado usuário.
+	
+	// Endpoint que lista todos os relatos de um determinado usuário.
 	@GetMapping(path="/{usuarioId}/usuarios")
 	public ResponseEntity<?> meusRelatos(@PathVariable String usuarioId){
-		// A lista será construída após recuperação dos relatos através do identificador
-		// de usuário recebido via URI. 
+		// A lista será construída após recuperação dos relatos através do 
+		// identificador de usuário recebido via URI. 
 		List<Relato> relatos = relatosServices.relatosPorUsuario(usuarioId);
 		// Se o status da resposta for OK, a lista de "relatos" será devolvida.
 		return ResponseEntity
@@ -51,23 +52,39 @@ public class RelatosResources {
 				.body(relatos);
 	}
 	
+	// Endpoint que realiza a validação (reação) exercida pelo usuário
+	// num determinado relato.
+	// São recebidos dois parâmetros: o identificador do relato e o objeto "validacao".
 	@PostMapping(path="/{relatoId}/validacoes")
-	public ResponseEntity<?> validar(@PathVariable String relatoId, @Valid @RequestBody Validacao validacao) throws Exception {
+	public ResponseEntity<?> validar(@PathVariable String relatoId, @Valid @RequestBody 
+			Validacao validacao) throws Exception {
+		// É invocado o método "reagir()" e atribui o objeto reacaoDTO gerado 
+		// ao objeto "reacao".
 		ReacaoDTO reacao = relatosServices.reagir(relatoId, validacao);
+		// Se o status do HTTP for Ok, o objeto "reação" inserido no corpo
+		// da requisição.
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(reacao);
 	}
 	
+	// Endpoint que remove o determinado relato escolhido pelo próprio relator.
+	// Que recebe um identificador de relato. 
 	@DeleteMapping(path="/{relatoId}/selecionados")
-	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado(@PathVariable String relatoId) throws Exception{
+	public ResponseEntity<Void> removerSeuProprioRelatoSelecionado
+		(@PathVariable String relatoId) throws Exception{
 		try {
+			// O método de remoção do relato é invocado e para tal ação
+			// precisa do identificador do relato que será removido.
 			relatosServices.removerSeuProprioRelatoSelecionado(relatoId);
+		// Se a exceção "EmptyResultDataAccessException" for lançada.
 		}catch (EmptyResultDataAccessException e) {
+			// A resposta da requisição será um 404.
 			return ResponseEntity
 					.notFound()
 					.build();
 		}
+		// A resposta da requisição será vazia.
 		return ResponseEntity
 				.noContent()
 				.build();		

@@ -42,6 +42,7 @@ public class Categoria {
 	public List<Relato> getRelatos() {return relatos;}
 	public void setRelatos(List<Relato> relatos) {this.relatos = relatos;}
 
+	// Sobrescrita do método "hashCode()"
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -50,6 +51,7 @@ public class Categoria {
 		return result;
 	}
 
+	// Sobrescrita do método "equals()"
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
