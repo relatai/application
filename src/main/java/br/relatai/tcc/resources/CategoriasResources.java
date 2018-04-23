@@ -43,14 +43,14 @@ public class CategoriasResources {
 	
 	// Endpoint do tipo GET que recebe uma lista de identificadores de categorias separados
 	// por vírgulas.
-	@GetMapping(path = "/{categoriaId}")
-	public ResponseEntity<?> buscarPorIdentificadores(@PathVariable List<String> listaIds) {
+	@GetMapping(path = "/{categoriaIds}")
+	public ResponseEntity<?> buscarPorIdentificadores(@PathVariable List<String> categoriaIds) {
 		// O cache é construído com tempo de 5 segundos.
 		CacheControl cacheControl = CacheControl.maxAge(5, TimeUnit.SECONDS);
 		// A lista de identificadores das categorias é passada por parâmetro ao método
 		// "buscarDiversasCategorias()" que gera uma lista destes objetos e a atribui a
 		// lista de categorias.
-		List<Categoria> categorias = categoriasServices.buscarDiversasCategorias(listaIds);
+		List<Categoria> categorias = categoriasServices.buscarDiversasCategorias(categoriaIds);
 		// Se o status do HTTP for Ok, o cache e a lista de categorias serão incluídos
 		// na resposta e esta será retornada.
 		return ResponseEntity.status(HttpStatus.OK)
